@@ -36,4 +36,32 @@ fn main() {
                 .default_value("10"), // Capture 10 packets by default
         )
         .get_matches();
+
+    let interface_name = matches.value_of("interface").unwrap_or("default_interface_name");
+    let interface = datalink::interfaces()
+        .into_iter()
+        .find(|iface| iface.name == interface_name)
+        .expect("Error finding interface");
+
+    let (_, mut rx) = match datalink::channel(&interface, Default::default()) {
+        Ok(Ethernet(tx, rx)) => (tx, rx),
+        Ok(_) => panic!("Unhandled channel type"),
+        Err(e) => panic!("Error creating datalink channel: {}", e),
+    };
+    let mut packet_count = 0;
+    let total_packets_to_capture = matches.value_of("count").unwrap().parse::<i32>().unwrap();
+
+    while packet_count < total_packets_to_capture {
+        match rx.next() {
+            Ok(packet) => {
+                let packet = EthernetPacket::new(packet).unwrap();
+                // Process the packet (e.g., print out its contents)
+                println!("Received packet: {:?}", packet);
+                packet_count += 1;
+            }
+            Err(e) => {
+                // Handle the error...
+            }
+        }
+    }
 }
