@@ -60,6 +60,7 @@ fn main() {
                 packet_count += 1;
             }
             Err(e) => {
+                // Handling later
             }
         }
     }
