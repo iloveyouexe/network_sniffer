@@ -8,7 +8,7 @@ fn main() {
 
     let matches = App::new("Network Sniffer")
         .version("0.1.0")
-        .author("Your Name")
+        .author("Bmo")
         .about("CLI tool for monitoring network traffic")
         .arg(
             Arg::with_name("interface")
@@ -48,6 +48,7 @@ fn main() {
         Ok(_) => panic!("Unhandled channel type"),
         Err(e) => panic!("Error creating datalink channel: {}", e),
     };
+
     let mut packet_count = 0;
     let total_packets_to_capture = matches.value_of("count").unwrap().parse::<i32>().unwrap();
 
