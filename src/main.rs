@@ -56,7 +56,6 @@ fn main() {
         match rx.next() {
             Ok(packet) => {
                 let packet = EthernetPacket::new(packet).unwrap();
-                // Process the packet (e.g., print out its contents)
                 println!("Received packet: {:?}", packet);
                 packet_count += 1;
             }
